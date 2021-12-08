@@ -18,36 +18,55 @@ function addDestinationInfo(document, name, diameter, star, distance, moons, ima
 
 function validateInput(testInput) {
     if(testInput === "") {
-        return "Empty";
+        return 'Empty';
     }
     if(isNaN(testInput)) {
-        return "Not a Number"
+        return 'Not a Number';
     }
-    if(typeof(Number(testInput)) === "number") {
-        return "Is a Number"
+    if(typeof(Number(testInput)) === 'number') {
+        return 'Is a Number';
     }
 }
 
 function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
    // document parameter is for html document
-   let userInputs = [pilot,copilot,fuelLevel,cargoLevel];
 
-    for(let i = 0; i < userInputs.length; i++) {
-        if(validateInput(userInputs[i]).value === "Empty") {
-            alert("All fields are required!");
-            event.preventDefault();
-            break;
-        } //end of if statement
-    } //end of for loop
+   if(validateInput(pilot) === 'Empty' || validateInput(copilot) === 'Empty' || validateInput(fuelLevel) === 'Empty' || validateInput(cargoLevel) === 'Empty') {
+       alert('All fields are required!');
+   }
 
-    if(validateInput(pilotNameInput.value) === "Is a Number" || validateInput(copilotNameInput.value) === "Is a Number") {
-        alert("Name must use alphabetical letters.")
-        event.preventDefault();
-    } // end of if statement
+    if(validateInput(pilot) === 'Is a Number' || validateInput(copilot) === 'Is a Number') {
+        alert('Names must use alphabetical letters.')
+    } 
 
-    if(validateInput(fuelLevelInput.value) === "Not a Number" || validateInput(cargoMassInput.value) === "Not a Number") {
-        alert("Fuel Level and Cargo Mass must be a number.")
-    } // end of if statement
+    if(validateInput(fuelLevel) === 'Not a Number' || validateInput(cargoLevel) === 'Not a Number') {
+        alert('Fuel Level and Cargo Mass must be a number.')
+    } 
+
+    if(validateInput(pilot) === 'Not a Number' || validateInput(copilot) === 'Not a Number') {
+        document.querySelector('li[id=pilotStatus]').innerHTML = `Pilot ${pilot} is ready for launch`;
+        document.querySelector('li[id=copilotStatus]').innerHTML = `Co-pilot ${copilot} is ready for launch`;
+    }
+
+    if(Number(fuelLevel) < 10000) {
+        list.style.visibility = 'visible';
+        document.querySelector('li[id=fuelStatus]').innerHTML = 'Fuel level too low for launch';
+        document.querySelector('h2[id=launchStatus]').innerHTML = 'Shuttle not ready for launch';
+        document.querySelector('h2[id=launchStatus]').style.color = 'red';
+    }
+
+    if(Number(cargoLevel) > 10000) {
+        list.style.visibility = 'visible';
+        document.querySelector('li[id=cargoStatus]').innerHTML = 'Cargo mass too heavy for launch';
+        document.querySelector('h2[id=launchStatus]').innerHTML = 'Shuttle not ready for launch';
+        document.querySelector('h2[id=launchStatus]').style.color = 'red';
+    }
+
+    if(Number(cargoLevel) < 10000 && Number(fuelLevel) > 10000) {
+        list.style.visibility = 'visible';
+        document.querySelector('h2[id=launchStatus]').innerHTML = 'Shuttle is Ready for Launch';
+        document.querySelector('h2[id=launchStatus]').style.color = 'green';
+    }
 
 }; //end of formSubmission function
 

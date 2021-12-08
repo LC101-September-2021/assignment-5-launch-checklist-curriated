@@ -1,17 +1,18 @@
 // Write your JavaScript code here!
 
 
-window.addEventListener("load", function() {
-    const form = document.querySelector("form");
-    const list = document.getElementById("faultyItems");
-    const pilotNameInput = document.querySelector("input[name=pilotName]")
-    const copilotNameInput = document.querySelector("input[name=copilotName]")
-    const fuelLevelInput = document.querySelector("select[name=fuelLevel]")
-    const cargoMassInput = document.querySelector("input[name=cargoMass]")
+window.addEventListener('load', function() {
+        const form = document.querySelector('form');
+    
+    form.addEventListener('submit',function(event) {
+        event.preventDefault();
+        const list = document.querySelector('div[id=faultyItems]');
+        let pilotNameInput = document.querySelector('input[name=pilotName]').value
+        let copilotNameInput = document.querySelector('input[name=copilotName]').value
+        let fuelLevelInput = document.querySelector('input[name=fuelLevel]').value
+        let cargoMassInput = document.querySelector('input[name=cargoMass]').value
 
-    form.addEventListener("submit",function(event) {
-
-     formSubmission(form,list,pilotNameInput,copilotNameInput,fuelLevelInput,cargoMassInput)
+     formSubmission(document,list,pilotNameInput,copilotNameInput,fuelLevelInput,cargoMassInput)
 
     });
 
