@@ -3,17 +3,19 @@ require('isomorphic-fetch');
 
 function addDestinationInfo(document, name, diameter, star, distance, moons, imageUrl) {
    // Here is the HTML formatting for our mission target div.
-   /*
+   document.querySelector('div[id=missionTarget]').innerHTML = 
+                `
                 <h2>Mission Destination</h2>
                 <ol>
-                    <li>Name: </li>
-                    <li>Diameter: </li>
+                    <li>Name: ${name}</li>
+                    <li>Diameter: ${diameter}</li>
                     <li>Star: ${star}</li>
-                    <li>Distance from Earth: </li>
-                    <li>Number of Moons: </li>
+                    <li>Distance from Earth: ${distance}</li>
+                    <li>Number of Moons: ${moons}</li>
                 </ol>
-                <img src="">
-   */
+                <img src="${imageUrl}">
+                `
+
 }
 
 function validateInput(testInput) {
@@ -51,21 +53,29 @@ function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
     if(Number(fuelLevel) < 10000) {
         list.style.visibility = 'visible';
         document.querySelector('li[id=fuelStatus]').innerHTML = 'Fuel level too low for launch';
-        document.querySelector('h2[id=launchStatus]').innerHTML = 'Shuttle not ready for launch';
-        document.querySelector('h2[id=launchStatus]').style.color = 'red';
+        document.querySelector('h2[id=launchStatus]').innerHTML = 'Shuttle Not Ready for Launch';
+        document.querySelector('h2[id=launchStatus]').style.color = 'rgb(199, 37, 78)';
+    }
+
+    if(Number(fuelLevel) >= 10000) {
+        document.querySelector('li[id=fuelStatus]').innerHTML = 'Fuel level high enough for launch';
     }
 
     if(Number(cargoLevel) > 10000) {
         list.style.visibility = 'visible';
         document.querySelector('li[id=cargoStatus]').innerHTML = 'Cargo mass too heavy for launch';
-        document.querySelector('h2[id=launchStatus]').innerHTML = 'Shuttle not ready for launch';
-        document.querySelector('h2[id=launchStatus]').style.color = 'red';
+        document.querySelector('h2[id=launchStatus]').innerHTML = 'Shuttle Not Ready for Launch';
+        document.querySelector('h2[id=launchStatus]').style.color = 'rgb(199, 37, 78)';
     }
 
-    if(Number(cargoLevel) < 10000 && Number(fuelLevel) > 10000) {
+    if(Number(cargoLevel) <= 10000) {
+        document.querySelector('li[id=cargoStatus]').innerHTML = 'Cargo mass low enough for launch';
+     }
+
+    if(Number(cargoLevel) <= 10000 && Number(fuelLevel) >= 10000) {
         list.style.visibility = 'visible';
         document.querySelector('h2[id=launchStatus]').innerHTML = 'Shuttle is Ready for Launch';
-        document.querySelector('h2[id=launchStatus]').style.color = 'green';
+        document.querySelector('h2[id=launchStatus]').style.color = 'rgb(65, 159, 106)';
     }
 
 }; //end of formSubmission function
@@ -73,13 +83,17 @@ function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
 async function myFetch() {
     let planetsReturned;
 
-    planetsReturned = await fetch().then( function(response) {
+    planetsReturned = await fetch("https://handlers.education.launchcode.org/static/planets.json").then( function(response) {
+        return response.json();
         });
 
     return planetsReturned;
 }
 
 function pickPlanet(planets) {
+    let max = planets.length;
+    let i = Math.floor(Math.random()*max);
+    return planets[i];
 }
 
 module.exports.addDestinationInfo = addDestinationInfo;
